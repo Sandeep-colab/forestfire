@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FWI Prediction</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212; /* Dark background */
+            color: #f0f0f0; /* Light text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #1e1e1e; /* Darker container background */
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Softer shadow */
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid #333; /* Darker border */
+        }
+
+        h1 {
+            color: #89cff0; /* Light blue heading */
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 600;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Keyframes for the RGB running border effect (for input borders) */
+        @keyframes rgb-border-animation {
+            0% { border-color: #ff0000; } /* Red */
+            16% { border-color: #ff7f00; } /* Orange */
+            33% { border-color: #ffff00; } /* Yellow */
+            50% { border-color: #00ff00; } /* Green */
+            66% { border-color: #0000ff; } /* Blue */
+            83% { border-color: #4b0082; } /* Indigo */
+            100% { border-color: #9400d3; } /* Violet */
+        }
+
+        /* Keyframes for the RGB placeholder text color animation */
+        @keyframes placeholder-rgb-animation {
+            0% { color: #ff0000; }
+            16% { color: #ff7f00; }
+            33% { color: #ffff00; }
+            50% { color: #00ff00; }
+            66% { color: #0000ff; }
+            83% { color: #4b0082; }
+            100% { color: #9400d3; }
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            margin: 0 auto;
+            border: 2px solid; /* Make border thicker for effect */
+            border-radius: 6px;
+            font-size: 1em;
+            background-color: #333; /* Dark input background */
+            color: #fff; /* White input text */
+            box-sizing: border-box;
+            /* Apply border animation */
+            animation: rgb-border-animation 10s infinite linear;
+            transition: background-color 0.3s ease; /* Smooth transition for background if not animated */
+        }
+
+        /* Styling for the placeholder text */
+        input::placeholder {
+            animation: placeholder-rgb-animation 8s infinite linear; /* Apply RGB animation to placeholder */
+            opacity: 1; /* Ensure placeholder is fully visible for the color effect */
+        }
+        /* For older browsers, you might need vendor prefixes */
+        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+            animation: placeholder-rgb-animation 8s infinite linear;
+            opacity: 1;
+        }
+        ::-moz-placeholder { /* Firefox 19+ */
+            animation: placeholder-rgb-animation 8s infinite linear;
+            opacity: 1;
+        }
+        :-ms-input-placeholder { /* IE 10+ */
+            animation: placeholder-rgb-animation 8s infinite linear;
+            opacity: 1;
+        }
+        :-moz-placeholder { /* Firefox 18- */
+            animation: placeholder-rgb-animation 8s infinite linear;
+            opacity: 1;
+        }
+
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(137, 207, 240, 0.7); /* Slightly stronger focus shadow */
+            /* Keep the border animation running on focus */
+            animation: rgb-border-animation 10s infinite linear;
+        }
+
+        /* When focused, remove placeholder animation to show user input clearly */
+        input[type="text"]:focus::placeholder {
+            animation: none; /* Stop placeholder animation on focus */
+            color: #ccc; /* Default placeholder color on focus */
+        }
+
+
+        button {
+            background-color: #89cff0; /* Light blue button */
+            color: #1e1e1e; /* Dark button text */
+            padding: 15px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: #5dade2; /* Slightly darker blue on hover */
+            transform: translateY(-2px);
+        }
+
+        h2 {
+            margin-top: 35px;
+            color: #90ee90; /* Light green result text */
+            font-size: 1.8em;
+            font-weight: 500;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FWI Prediction</h1>
+
+        <form action="{{ url_for('predict_datapoint') }}" method="post">
+            <input type="text" name="Temperature" placeholder="Temperature" required="required" /><br>
+            <input type="text" name="RH" placeholder="RH" required="required" /><br>
+            <input type="text" name="Ws" placeholder="Ws" required="required" /><br>
+            <input type="text" name="Rain" placeholder="Rain" required="required" /><br>
+            <input type="text" name="FFMC" placeholder="FFMC" required="required" /><br>
+            <input type="text" name="DMC" placeholder="DMC" required="required" /><br>
+            <input type="text" name="ISI" placeholder="ISI" required="required" /><br>
+            <input type="text" name="Classes" placeholder="Classes" required="required" /><br>
+            <input type="text" name="Region" placeholder="Region" required="required" /><br>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        <h2>THE FWI prediction is {{ result }}</h2>
+    </div>
+</body>
+</html>
