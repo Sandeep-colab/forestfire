@@ -1,2 +1,37 @@
-venv
+# Python cache
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code and IDE settings
+.vscode/
+.idea/
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
 .env
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Testing
+.coverage
+.tox/
+.pytest_cache/
